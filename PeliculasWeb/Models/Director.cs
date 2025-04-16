@@ -11,11 +11,10 @@
         //FK
         public string Nombre { get; set; }
         public string Nacionalidad { get; set; }
-
+        public DateTime FechaNacimiento { get; set; }
         public int Edad { get; set; }
 
         //navegacion
-
         public Usuarios usuarios { get; set; }
 
 

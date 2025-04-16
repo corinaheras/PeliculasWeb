@@ -4,6 +4,7 @@
     {
         //PK
         public int IdCliente { get; set; }
+
         //FK
         public string Nombre { get; set; }
 
@@ -12,7 +13,7 @@
         private bool EsPremium { get; set; } 
 
         //navegacion
-        public Usuarios usuarios { get; set; }
+        public Usuarios Usuarios { get; set; }
 
         //relacion 1-N
         public ICollection<Reseña> Reseñas { get; set; }

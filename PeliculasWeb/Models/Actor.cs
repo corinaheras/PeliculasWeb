@@ -2,6 +2,8 @@
 {
     public class Actor
     {
+
+        //PK 
         public int IdActor { get; set; }
 
         //FK
@@ -15,7 +17,7 @@
 
         //Navegacion
 
-        public Usuarios usuarios { get; set; }
+        public Usuarios Usuarios { get; set; }
 
         //relacion 1-N
         public ICollection<Pelicula> PeliculasProtagonizadas { get; set; }
