@@ -1,19 +1,11 @@
 ﻿namespace PeliculasWeb.Models
 {
-    public class Cliente
+    public class Cliente : Usuarios
     {
-        //PK
-        public int IdCliente { get; set; }
-
-        //FK
-        public string Nombre { get; set; }
-
+  
         //atributos
         public string CorreoElectronico { get; set; }
-        private bool EsPremium { get; set; } 
-
-        //navegacion
-        public Usuarios Usuarios { get; set; }
+        private bool EsPremium { get; set; }
 
         //relacion 1-N
         public ICollection<Reseña> Reseñas { get; set; }
