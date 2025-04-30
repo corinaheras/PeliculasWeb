@@ -1,0 +1,53 @@
+﻿@model IEnumerable<PeliculasWeb.Models.Actor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Actores</h1>
+
+<p>
+    <a asp-action="Create">Nuevo Actor</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Personaje)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreActor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Edad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nacionalidad)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Personaje)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreActor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Edad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nacionalidad)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ActorId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ActorId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ActorId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
