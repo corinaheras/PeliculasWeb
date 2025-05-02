@@ -13,8 +13,8 @@ namespace PeliculasWeb.Models
         public int Edad { get; set; } //fecha de nacimiento del director
         public int PremiosGanados { get; set; }
 
-        [ValidateNever]
         //relacion 1-N
+        [ValidateNever]
         public ICollection<Pelicula> PeliculasDirigidas { get; set; }
 
     }

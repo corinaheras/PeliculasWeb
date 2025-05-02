@@ -19,9 +19,13 @@ namespace PeliculasWeb.Models
         public int ClienteId { get; set; }
         public int PeliculaId { get; set; }
 
-        [ValidateNever]
+
         //navegacion 
+
+        [ValidateNever]
         public Pelicula Pelicula { get; set; }
+
+        [ValidateNever]
         public Cliente Cliente { get; set; }
 
 

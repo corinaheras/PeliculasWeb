@@ -21,15 +21,20 @@ namespace PeliculasWeb.Models
 
         public int GeneroId { get; set; }
 
+        //navegacion 
 
         [ValidateNever]
-        //navegacion 
         public Actor Actor { get; set; }
+
+        [ValidateNever]
         public Director Director { get; set; }
+
+        [ValidateNever]
         public Genero Genero { get; set; }
 
 
         //relacion 1-N reseñas
+        [ValidateNever]
         public ICollection<Reseña> Reseñas { get; set; }
 
 

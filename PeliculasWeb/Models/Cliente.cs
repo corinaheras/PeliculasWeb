@@ -15,8 +15,9 @@ namespace PeliculasWeb.Models
         public DateTime FechaNacimiento { get; set; }
         public bool EsPremium { get; set; }
 
-        [ValidateNever]
+        
         //relacion 1-N
+        [ValidateNever]
         public ICollection<Reseña> Reseñas { get; set; }
 
     }

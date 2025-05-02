@@ -14,9 +14,9 @@ namespace PeliculasWeb.Models
         public int Edad { get; set; }
         public string Nacionalidad { get; set; }
 
+        //relacion 1-N
 
         [ValidateNever]
-        //relacion 1-N
         public ICollection<Pelicula> PeliculasProtagonizadas { get; set; }
     }
 }

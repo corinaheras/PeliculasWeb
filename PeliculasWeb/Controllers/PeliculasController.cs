@@ -74,15 +74,18 @@ namespace PeliculasWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, [Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula, IFormFile ImagenArchivo)
+        public async Task<IActionResult> Create([Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula, IFormFile ImagenArchivo)
         {
-            if (id != pelicula.PeliculaId)
+            /*if (id != pelicula.PeliculaId)
             {
                 return NotFound();
-            }
+            }*/
 
+            Console.WriteLine("Holaaaaaa");
             if (ModelState.IsValid)
             {
+                Console.WriteLine("Modelo");
+
                 try
                 {
                     if (ImagenArchivo != null && ImagenArchivo.Length > 0)
@@ -98,7 +101,7 @@ namespace PeliculasWeb.Controllers
                         //Guardar nueva ruta de imagen
                         pelicula.ImagenRuta = "/imagenes/" + nombreArchivo;
                     }
-                    _context.Update(pelicula);
+                    _context.Add(pelicula);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
