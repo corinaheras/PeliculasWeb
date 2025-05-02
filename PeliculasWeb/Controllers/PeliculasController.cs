@@ -20,10 +20,22 @@ namespace PeliculasWeb.Controllers
         }
 
         // GET: Peliculas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var appDbContext = _context.Peliculas.Include(p => p.Actor).Include(p => p.Director);
-            return View(await appDbContext.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            var peliculas = from p in _context.Peliculas
+                .Include(p => p.Actor)
+                .Include(p => p.Director)
+                .Include(p => p.Genero)
+                            select p;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                peliculas = peliculas.Where(p => p.NombrePelicula.Contains(searchString));
+            }
+
+            return View(await peliculas.ToListAsync());
         }
 
         // GET: Peliculas/Details/5
@@ -37,6 +49,7 @@ namespace PeliculasWeb.Controllers
             var pelicula = await _context.Peliculas
                 .Include(p => p.Actor)
                 .Include(p => p.Director)
+                .Include(p => p.Genero)
                 .FirstOrDefaultAsync(m => m.PeliculaId == id);
             if (pelicula == null)
             {
@@ -49,8 +62,10 @@ namespace PeliculasWeb.Controllers
         // GET: Peliculas/Create
         public IActionResult Create()
         {
-            ViewData["ActorId"] = new SelectList(_context.Actores, "ActorId", "ActorId");
-            ViewData["DirectorId"] = new SelectList(_context.Directores, "DirectorId", "DirectorId");
+            ViewData["ActorId"] = new SelectList(_context.Actores, "ActorId", "NombreActor");
+            ViewData["DirectorId"] = new SelectList(_context.Directores, "DirectorId", "Nombre");
+            ViewData["GeneroId"] = new SelectList(_context.Generos, "GeneroId", "NombreGenero");
+
             return View();
         }
 
@@ -59,43 +74,7 @@ namespace PeliculasWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PeliculaId,FechaEstreno,NombrePelicula,Genero,Sipnosis,ActorId,DirectorId")] Pelicula pelicula)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(pelicula);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ActorId"] = new SelectList(_context.Actores, "ActorId", "ActorId", pelicula.ActorId);
-            ViewData["DirectorId"] = new SelectList(_context.Directores, "DirectorId", "DirectorId", pelicula.DirectorId);
-            return View(pelicula);
-        }
-
-        // GET: Peliculas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var pelicula = await _context.Peliculas.FindAsync(id);
-            if (pelicula == null)
-            {
-                return NotFound();
-            }
-            ViewData["ActorId"] = new SelectList(_context.Actores, "ActorId", "NombreActor", pelicula.ActorId);
-            ViewData["DirectorId"] = new SelectList(_context.Directores, "DirectorId", "Nombre", pelicula.DirectorId);
-            return View(pelicula);
-        }
-
-        // POST: Peliculas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PeliculaId,FechaEstreno,NombrePelicula,Genero,Sipnosis,ActorId,DirectorId")] Pelicula pelicula)
+        public async Task<IActionResult> Create(int id, [Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula, IFormFile ImagenArchivo)
         {
             if (id != pelicula.PeliculaId)
             {
@@ -106,6 +85,19 @@ namespace PeliculasWeb.Controllers
             {
                 try
                 {
+                    if (ImagenArchivo != null && ImagenArchivo.Length > 0)
+                    {
+                        var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(ImagenArchivo.FileName);
+                        var ruta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagenes", nombreArchivo);
+
+                        using (var stream = new FileStream(ruta, FileMode.Create))
+                        {
+                            await ImagenArchivo.CopyToAsync(stream);
+                        }
+
+                        //Guardar nueva ruta de imagen
+                        pelicula.ImagenRuta = "/imagenes/" + nombreArchivo;
+                    }
                     _context.Update(pelicula);
                     await _context.SaveChangesAsync();
                 }
@@ -124,6 +116,80 @@ namespace PeliculasWeb.Controllers
             }
             ViewData["ActorId"] = new SelectList(_context.Actores, "ActorId", "NombreActor", pelicula.ActorId);
             ViewData["DirectorId"] = new SelectList(_context.Directores, "DirectorId", "Nombre", pelicula.DirectorId);
+            ViewData["GeneroId"] = new SelectList(_context.Generos, "GeneroId", "NombreGenero", pelicula.GeneroId);
+
+            return View(pelicula);
+        }
+
+        // GET: Peliculas/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pelicula = await _context.Peliculas.FindAsync(id);
+            if (pelicula == null)
+            {
+                return NotFound();
+            }
+            ViewData["ActorId"] = new SelectList(_context.Actores, "ActorId", "NombreActor", pelicula.ActorId);
+            ViewData["DirectorId"] = new SelectList(_context.Directores, "DirectorId", "Nombre", pelicula.DirectorId);
+            ViewData["GeneroId"] = new SelectList(_context.Generos, "GeneroId", "NombreGenero", pelicula.GeneroId);
+
+            return View(pelicula);
+        }
+
+        // POST: Peliculas/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula, IFormFile ImagenArchivo)
+        {
+            if (id != pelicula.PeliculaId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (ImagenArchivo != null && ImagenArchivo.Length > 0)
+                    {
+                        var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(ImagenArchivo.FileName);
+                        var ruta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagenes", nombreArchivo);
+
+                        using (var stream = new FileStream(ruta, FileMode.Create))
+                        {
+                            await ImagenArchivo.CopyToAsync(stream);
+                        }
+
+                        //Guardar nueva ruta de imagen
+                        pelicula.ImagenRuta = "/imagenes/" + nombreArchivo; 
+                    } 
+                    _context.Update(pelicula);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PeliculaExists(pelicula.PeliculaId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["ActorId"] = new SelectList(_context.Actores, "ActorId", "NombreActor", pelicula.PeliculaId);
+            ViewData["DirectorId"] = new SelectList(_context.Directores, "DirectorId", "Nombre", pelicula.DirectorId);
+            ViewData["GeneroId"] = new SelectList(_context.Generos, "GeneroId", "NombreGenero", pelicula.GeneroId);
+
             return View(pelicula);
         }
 
@@ -138,6 +204,7 @@ namespace PeliculasWeb.Controllers
             var pelicula = await _context.Peliculas
                 .Include(p => p.Actor)
                 .Include(p => p.Director)
+                .Include(p => p.Genero)
                 .FirstOrDefaultAsync(m => m.PeliculaId == id);
             if (pelicula == null)
             {

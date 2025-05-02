@@ -1,4 +1,6 @@
-﻿namespace PeliculasWeb.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+
+namespace PeliculasWeb.Models
 {
     public class Cliente 
     {
@@ -13,7 +15,7 @@
         public DateTime FechaNacimiento { get; set; }
         public bool EsPremium { get; set; }
 
-
+        [ValidateNever]
         //relacion 1-N
         public ICollection<Reseña> Reseñas { get; set; }
 

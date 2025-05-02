@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PeliculasWeb.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,6 +60,20 @@ namespace PeliculasWeb.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Generos",
+                columns: table => new
+                {
+                    GeneroId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NombreGenero = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Generos", x => x.GeneroId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Peliculas",
                 columns: table => new
                 {
@@ -67,10 +81,11 @@ namespace PeliculasWeb.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FechaEstreno = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NombrePelicula = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Genero = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sipnosis = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImagenRuta = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ActorId = table.Column<int>(type: "int", nullable: false),
-                    DirectorId = table.Column<int>(type: "int", nullable: false)
+                    DirectorId = table.Column<int>(type: "int", nullable: false),
+                    GeneroId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,6 +101,12 @@ namespace PeliculasWeb.Migrations
                         column: x => x.DirectorId,
                         principalTable: "Directores",
                         principalColumn: "DirectorId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Peliculas_Generos_GeneroId",
+                        column: x => x.GeneroId,
+                        principalTable: "Generos",
+                        principalColumn: "GeneroId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -130,6 +151,11 @@ namespace PeliculasWeb.Migrations
                 column: "DirectorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Peliculas_GeneroId",
+                table: "Peliculas",
+                column: "GeneroId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reseñas_ClienteId",
                 table: "Reseñas",
                 column: "ClienteId");
@@ -157,6 +183,9 @@ namespace PeliculasWeb.Migrations
 
             migrationBuilder.DropTable(
                 name: "Directores");
+
+            migrationBuilder.DropTable(
+                name: "Generos");
         }
     }
 }

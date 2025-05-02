@@ -20,11 +20,22 @@ namespace PeliculasWeb.Controllers
         }
 
         // GET: Reseñas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var appDbContext = _context.Reseñas.Include(r => r.Cliente).Include(r => r.Pelicula);
-            return View(await appDbContext.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            var reseñas = from r in _context.Reseñas
+                .Include(r => r.Cliente).Include(r => r.Pelicula)
+                            select r;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                reseñas = reseñas.Where(r => r.Pelicula.NombrePelicula.Contains(searchString));
+            }
+
+            return View(await reseñas.ToListAsync());
         }
+
 
         // GET: Reseñas/Details/5
         public async Task<IActionResult> Details(int? id)

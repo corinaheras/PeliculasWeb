@@ -1,4 +1,6 @@
-﻿namespace PeliculasWeb.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+
+namespace PeliculasWeb.Models
 {
     public class Actor 
     {
@@ -13,6 +15,7 @@
         public string Nacionalidad { get; set; }
 
 
+        [ValidateNever]
         //relacion 1-N
         public ICollection<Pelicula> PeliculasProtagonizadas { get; set; }
     }

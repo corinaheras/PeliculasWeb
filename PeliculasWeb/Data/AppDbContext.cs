@@ -15,6 +15,7 @@ namespace PeliculasWeb.Data
         public DbSet<Actor> Actores { get; set; }
         public DbSet<Director> Directores { get; set; }
 
+        public DbSet<Genero> Generos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,7 +48,12 @@ namespace PeliculasWeb.Data
                 .HasForeignKey(p => p.DirectorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
+            // Relación: Genero - Peliculas (1:N)
+            modelBuilder.Entity<Pelicula>()
+              .HasOne(p => p.Genero)
+              .WithMany(d => d.Peliculas)
+              .HasForeignKey(p => p.GeneroId)
+              .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

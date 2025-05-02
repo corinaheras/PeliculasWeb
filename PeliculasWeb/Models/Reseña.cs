@@ -1,4 +1,6 @@
-﻿namespace PeliculasWeb.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+
+namespace PeliculasWeb.Models
 {
     public class Reseña 
     {
@@ -17,7 +19,7 @@
         public int ClienteId { get; set; }
         public int PeliculaId { get; set; }
 
-
+        [ValidateNever]
         //navegacion 
         public Pelicula Pelicula { get; set; }
         public Cliente Cliente { get; set; }

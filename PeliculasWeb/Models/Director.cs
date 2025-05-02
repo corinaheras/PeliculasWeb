@@ -1,4 +1,6 @@
-﻿namespace PeliculasWeb.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+
+namespace PeliculasWeb.Models
 {
     public class Director 
     {
@@ -11,6 +13,7 @@
         public int Edad { get; set; } //fecha de nacimiento del director
         public int PremiosGanados { get; set; }
 
+        [ValidateNever]
         //relacion 1-N
         public ICollection<Pelicula> PeliculasDirigidas { get; set; }
 

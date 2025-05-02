@@ -9,6 +9,14 @@
 <p>
     <a asp-action="Create">Nueva Pelicula</a>
 </p>
+
+<form asp-action="Index" method="get">
+    <div class="form-group">
+        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Buscar por película......."/>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -25,10 +33,10 @@
                 @Html.DisplayNameFor(model => model.Sipnosis)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Actor.NombreActor)
+                @Html.DisplayNameFor(model => model.Actor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Director.Nombre)
+                @Html.DisplayNameFor(model => model.Director)
             </th>
             <th></th>
         </tr>
@@ -43,7 +51,7 @@
                 @Html.DisplayFor(modelItem => item.NombrePelicula)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Genero)
+                @Html.DisplayFor(modelItem => item.Genero.NombreGenero)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Sipnosis)
@@ -54,6 +62,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Director.Nombre)
             </td>
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PeliculaId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.PeliculaId">Details</a> |

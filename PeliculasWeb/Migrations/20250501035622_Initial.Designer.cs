@@ -12,8 +12,8 @@ using PeliculasWeb.Data;
 namespace PeliculasWeb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250421232615_initial")]
-    partial class initial
+    [Migration("20250501035622_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,6 +107,27 @@ namespace PeliculasWeb.Migrations
                     b.ToTable("Directores");
                 });
 
+            modelBuilder.Entity("PeliculasWeb.Models.Genero", b =>
+                {
+                    b.Property<int>("GeneroId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GeneroId"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NombreGenero")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GeneroId");
+
+                    b.ToTable("Generos");
+                });
+
             modelBuilder.Entity("PeliculasWeb.Models.Pelicula", b =>
                 {
                     b.Property<int>("PeliculaId")
@@ -124,7 +145,10 @@ namespace PeliculasWeb.Migrations
                     b.Property<DateTime>("FechaEstreno")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Genero")
+                    b.Property<int>("GeneroId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImagenRuta")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -141,6 +165,8 @@ namespace PeliculasWeb.Migrations
                     b.HasIndex("ActorId");
 
                     b.HasIndex("DirectorId");
+
+                    b.HasIndex("GeneroId");
 
                     b.ToTable("Peliculas");
                 });
@@ -195,9 +221,17 @@ namespace PeliculasWeb.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("PeliculasWeb.Models.Genero", "Genero")
+                        .WithMany("Peliculas")
+                        .HasForeignKey("GeneroId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Actor");
 
                     b.Navigation("Director");
+
+                    b.Navigation("Genero");
                 });
 
             modelBuilder.Entity("PeliculasWeb.Models.Reseña", b =>
@@ -232,6 +266,11 @@ namespace PeliculasWeb.Migrations
             modelBuilder.Entity("PeliculasWeb.Models.Director", b =>
                 {
                     b.Navigation("PeliculasDirigidas");
+                });
+
+            modelBuilder.Entity("PeliculasWeb.Models.Genero", b =>
+                {
+                    b.Navigation("Peliculas");
                 });
 
             modelBuilder.Entity("PeliculasWeb.Models.Pelicula", b =>
