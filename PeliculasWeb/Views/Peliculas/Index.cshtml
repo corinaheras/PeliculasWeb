@@ -38,6 +38,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Director)
             </th>
+            <td>
+                @Html.DisplayNameFor(model => model.ImagenRuta)
+            </td>
             <th></th>
         </tr>
     </thead>
@@ -62,6 +65,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Director.Nombre)
             </td>
+            <td>
+                  @if (!string.IsNullOrEmpty(item.ImagenRuta))
+                   {
+                      <img src="@item.ImagenRuta" alt="Portada" style="width:100px;height:auto;" />
+                   }
+            <td>
 
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PeliculaId">Edit</a> |

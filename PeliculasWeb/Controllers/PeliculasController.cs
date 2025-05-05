@@ -81,10 +81,8 @@ namespace PeliculasWeb.Controllers
                 return NotFound();
             }*/
 
-            Console.WriteLine("Holaaaaaa");
             if (ModelState.IsValid)
             {
-                Console.WriteLine("Modelo");
 
                 try
                 {

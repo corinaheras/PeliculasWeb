@@ -46,6 +46,15 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Director.Nombre)
         </dd>
+
+        @if (!String.IsNullOrEmpty(Model.ImagenRuta))
+        {
+            <div class="form.group">
+                <label>Portada actual: </label><br />
+                <img src="@Model.ImagenRuta" alt="Portada actual" style="width:100px;height:auto;" />
+            </div>
+        }
+
     </dl>
 </div>
 <div>
