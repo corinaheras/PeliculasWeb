@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using System.ComponentModel;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace PeliculasWeb.Models
 {
@@ -8,10 +9,12 @@ namespace PeliculasWeb.Models
         public int ReseñaId { get; set; }
 
         //atributos
+        [DisplayName ("Calificación")]
         public int Calificacion { get; set; }
         public string Comentario { get; set; }
-
+        [DisplayName ("Fecha de publicación")]
         public DateTime FechaReseña { get; set; }
+        [DisplayName ("Recomendada?")]
         public bool EsRecomendada { get; set; }
 
 

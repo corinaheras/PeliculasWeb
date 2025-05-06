@@ -20,9 +20,10 @@ namespace PeliculasWeb.Controllers
         }
 
         // GET: Peliculas
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, string NombreGenero)
         {
             ViewData["CurrentFilter"] = searchString;
+            ViewData["Genero"] = NombreGenero;
 
             var peliculas = from p in _context.Peliculas
                 .Include(p => p.Actor)
@@ -33,6 +34,11 @@ namespace PeliculasWeb.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 peliculas = peliculas.Where(p => p.NombrePelicula.Contains(searchString));
+            }
+
+            if (!String.IsNullOrEmpty(NombreGenero))
+            {
+                peliculas = peliculas.Where(p => p.Genero.NombreGenero.Contains(NombreGenero));
             }
 
             return View(await peliculas.ToListAsync());
