@@ -155,15 +155,19 @@ namespace PeliculasWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula, IFormFile ImagenArchivo)
         {
-            if (id != pelicula.PeliculaId)
-            {
-                return NotFound();
-            }
+            Console.WriteLine("entrando a la logica de img");
+
+        if (id != pelicula.PeliculaId)   
+                {
+
+                    return NotFound();
+                }
 
             if (ModelState.IsValid)
             {
                 try
                 {
+
                     if (ImagenArchivo != null && ImagenArchivo.Length > 0)
                     {
                         var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(ImagenArchivo.FileName);
@@ -175,10 +179,22 @@ namespace PeliculasWeb.Controllers
                         }
 
                         //Guardar nueva ruta de imagen
-                        pelicula.ImagenRuta = "/imagenes/" + nombreArchivo; 
-                    } 
-                    _context.Update(pelicula);
+                        pelicula.ImagenRuta = "/imagenes/" + nombreArchivo;
+
+                    }
+
+                    else
+                    {
+                        var peliculaExistente = await _context.Peliculas.AsNoTracking().FirstOrDefaultAsync(p => p.PeliculaId == pelicula.PeliculaId);
+                        if (peliculaExistente != null)
+                        {
+                            pelicula.ImagenRuta = peliculaExistente.ImagenRuta;
+
+                        }
+                    }
+                        _context.Update(pelicula);
                     await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -193,6 +209,7 @@ namespace PeliculasWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ActorId"] = new SelectList(_context.Actores, "ActorId", "NombreActor", pelicula.PeliculaId);
             ViewData["DirectorId"] = new SelectList(_context.Directores, "DirectorId", "Nombre", pelicula.DirectorId);
             ViewData["GeneroId"] = new SelectList(_context.Generos, "GeneroId", "NombreGenero", pelicula.GeneroId);

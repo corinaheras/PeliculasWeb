@@ -12,7 +12,9 @@ namespace PeliculasWeb.Models
         //atributos
         [DisplayName("Personaje interpretado")]
         public string Personaje { get; set; }
+
         [DisplayName("Nombre")]
+
         public string NombreActor { get; set; }
         public int Edad { get; set; }
         public string Nacionalidad { get; set; }

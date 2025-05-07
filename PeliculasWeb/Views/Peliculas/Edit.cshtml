@@ -13,6 +13,9 @@
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="PeliculaId" />
+            <input type="hidden" asp-for="ImagenRuta" />
+
+
             <div class="form-group">
                 <label asp-for="FechaEstreno" class="control-label"></label>
                 <input asp-for="FechaEstreno" class="form-control" />
@@ -46,7 +49,7 @@
  
             @if (!String.IsNullOrEmpty(Model.ImagenRuta))
             {
-               <div class="form.group">
+               <div class="form-group">
                    <label>Portada actual: </label><br />
                    <img src="@Model.ImagenRuta" alt="Portada actual" style="width:100px;height:auto;"/>
                 </div>

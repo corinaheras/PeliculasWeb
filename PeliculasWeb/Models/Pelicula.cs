@@ -11,9 +11,11 @@ namespace PeliculasWeb.Models
         //atributos
         [DisplayName ("Fecha de estreno")]
         public DateTime FechaEstreno { get; set; }
+
         [DisplayName ("Nombre")]
         public string NombrePelicula { get; set; }
         public string Sipnosis { get; set; }
+
         [DisplayName ("Imagen")]
         public string? ImagenRuta { get; set; }
 
