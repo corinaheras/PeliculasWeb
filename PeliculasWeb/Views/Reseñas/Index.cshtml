@@ -1,75 +1,85 @@
 ﻿@model IEnumerable<PeliculasWeb.Models.Reseña>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h1>Reseñas</h1>
 
-<p>
-    <a asp-action="Create">Nueva Reseña</a>
-</p>
+<div class="mb-4">
+	<a asp-action="Create" class="btn btn-success">Nueva Reseña</a>
+</div>
 
+<div class="card mb-4">
+	<div class="card-body">
+		<form asp-action="Index" method="get">
+			<div class="row g-2">
+				<div class="col-md-6">
+					<input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Buscar por el nombre de la película......." />
+				</div>
+				<div class="col-md-2 d-grid">
+					<button type="submit" class="btn btn-primary">Buscar</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 
-<form asp-action="Index" method="get">
-    <div class="form-group">
-        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Buscar por el nombre de la película......." />
-    </div>
-    <button type="submit" class="btn btn-primary mt-2">Buscar</button>
-</form>
+<table class="table align-middle">
+	<thead class="table-bordered">
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Calificacion)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Comentario)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.FechaReseña)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.EsRecomendada)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Pelicula)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Cliente)
+			</th>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Calificacion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Comentario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FechaReseña)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EsRecomendada)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pelicula)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cliente)
-            </th>
-     
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Calificacion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comentario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaReseña)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EsRecomendada)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pelicula.NombrePelicula)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cliente.Nombre)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ReseñaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ReseñaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ReseñaId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Calificacion)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Comentario)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.FechaReseña)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.EsRecomendada)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Pelicula.NombrePelicula)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Cliente.Nombre)
+				</td>
+				<td>
+					<div class="btn-group" role="group">
+						<a asp-action="Edit" asp-route-id="@item.ReseñaId" class="btn btn-sm btn-outline-warning">Editar</a> |
+						<a asp-action="Details" asp-route-id="@item.ReseñaId" class="btn btn-sm btn-outline-info">Detalles</a> |
+						<a asp-action="Delete" asp-route-id="@item.ReseñaId" class="btn btn-sm btn-outline-danger">Eliminar</a>
+					</div>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
