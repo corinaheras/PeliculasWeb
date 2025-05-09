@@ -153,17 +153,20 @@ namespace PeliculasWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Edit(int id, [Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula, IFormFile ImagenArchivo)
         {
-            Console.WriteLine("entrando a la logica de img");
 
         if (id != pelicula.PeliculaId)   
                 {
 
                     return NotFound();
                 }
-
-            if (ModelState.IsValid)
+            if (ImagenArchivo != null && ImagenArchivo.Length > 0)
+            {
+                Console.WriteLine("punto");
+            }
+                if (ModelState.IsValid)
             {
                 try
                 {
@@ -210,9 +213,23 @@ namespace PeliculasWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+
+            if (ImagenArchivo == null || ImagenArchivo.Length == 0)
+            {
+                var peliculaExistente = await _context.Peliculas.AsNoTracking().FirstOrDefaultAsync(p => p.PeliculaId == pelicula.PeliculaId);
+                if (peliculaExistente != null)
+                {
+                    pelicula.ImagenRuta = peliculaExistente.ImagenRuta;
+                }
+            }
+
+
             ViewData["ActorId"] = new SelectList(_context.Actores, "ActorId", "NombreActor", pelicula.PeliculaId);
             ViewData["DirectorId"] = new SelectList(_context.Directores, "DirectorId", "Nombre", pelicula.DirectorId);
             ViewData["GeneroId"] = new SelectList(_context.Generos, "GeneroId", "NombreGenero", pelicula.GeneroId);
+
+
+
 
             return View(pelicula);
         }
