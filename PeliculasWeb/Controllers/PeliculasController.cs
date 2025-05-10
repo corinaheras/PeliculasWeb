@@ -80,7 +80,7 @@ namespace PeliculasWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula, IFormFile ImagenArchivo)
+        public async Task<IActionResult> Create([Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula)
         {
             /*if (id != pelicula.PeliculaId)
             {
@@ -92,14 +92,14 @@ namespace PeliculasWeb.Controllers
 
                 try
                 {
-                    if (ImagenArchivo != null && ImagenArchivo.Length > 0)
+                    if (pelicula.ImagenArchivo != null && pelicula.ImagenArchivo.Length > 0)
                     {
-                        var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(ImagenArchivo.FileName);
+                        var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(pelicula.ImagenArchivo.FileName);
                         var ruta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagenes", nombreArchivo);
 
                         using (var stream = new FileStream(ruta, FileMode.Create))
                         {
-                            await ImagenArchivo.CopyToAsync(stream);
+                            await pelicula.ImagenArchivo.CopyToAsync(stream);
                         }
 
                         //Guardar nueva ruta de imagen
@@ -154,15 +154,13 @@ namespace PeliculasWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Edit(int id, [Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula, IFormFile ImagenArchivo)
+        //        public async Task<IActionResult> Edit(int id, [Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula, IFormFile ImagenArchivo)
+
+        public async Task<IActionResult> Edit(int id, Pelicula pelicula)
         {
 
-        if (id != pelicula.PeliculaId)   
-                {
-
-                    return NotFound();
-                }
-            if (ImagenArchivo != null && ImagenArchivo.Length > 0)
+        if (id != pelicula.PeliculaId) return NotFound();
+            if (pelicula.ImagenArchivo != null && pelicula.ImagenArchivo.Length > 0)
             {
                 Console.WriteLine("punto");
             }
@@ -171,14 +169,14 @@ namespace PeliculasWeb.Controllers
                 try
                 {
 
-                    if (ImagenArchivo != null && ImagenArchivo.Length > 0)
+                    if (pelicula.ImagenArchivo != null && pelicula.ImagenArchivo.Length > 0)
                     {
-                        var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(ImagenArchivo.FileName);
+                        var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(pelicula.ImagenArchivo.FileName);
                         var ruta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagenes", nombreArchivo);
 
                         using (var stream = new FileStream(ruta, FileMode.Create))
                         {
-                            await ImagenArchivo.CopyToAsync(stream);
+                            await pelicula.ImagenArchivo.CopyToAsync(stream);
                         }
 
                         //Guardar nueva ruta de imagen
@@ -214,7 +212,7 @@ namespace PeliculasWeb.Controllers
             }
 
 
-            if (ImagenArchivo == null || ImagenArchivo.Length == 0)
+            if (pelicula.ImagenArchivo == null || pelicula.ImagenArchivo.Length == 0)
             {
                 var peliculaExistente = await _context.Peliculas.AsNoTracking().FirstOrDefaultAsync(p => p.PeliculaId == pelicula.PeliculaId);
                 if (peliculaExistente != null)

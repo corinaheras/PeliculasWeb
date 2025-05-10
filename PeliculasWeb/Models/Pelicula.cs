@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace PeliculasWeb.Models
@@ -19,6 +20,8 @@ namespace PeliculasWeb.Models
         [DisplayName ("Imagen")]
         public string? ImagenRuta { get; set; }
 
+        [NotMapped]
+        public IFormFile? ImagenArchivo { get; set; }
 
         //FK
         public int ActorId { get; set; }
