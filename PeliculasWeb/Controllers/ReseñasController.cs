@@ -60,8 +60,8 @@ namespace PeliculasWeb.Controllers
         // GET: Reseñas/Create
         public IActionResult Create()
         {
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "ClienteId");
-            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "PeliculaId", "PeliculaId");
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nombre");
+            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "PeliculaId", "NombrePelicula");
             return View();
         }
 
@@ -78,8 +78,8 @@ namespace PeliculasWeb.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "ClienteId", reseña.ClienteId);
-            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "PeliculaId", "PeliculaId", reseña.PeliculaId);
+            ViewData["ClienteId"] = new SelectList(_context.Clientes, "ClienteId", "Nombre", reseña.ClienteId);
+            ViewData["PeliculaId"] = new SelectList(_context.Peliculas, "PeliculaId", "NombrePelicula", reseña.PeliculaId);
             return View(reseña);
         }
 
