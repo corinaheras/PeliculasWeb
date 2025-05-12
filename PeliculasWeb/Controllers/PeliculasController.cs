@@ -80,13 +80,9 @@ namespace PeliculasWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PeliculaId,FechaEstreno,NombrePelicula,GeneroId,Sipnosis,ActorId,DirectorId,ImagenRuta")] Pelicula pelicula)
+        public async Task<IActionResult> Create(Pelicula pelicula)
         {
-            /*if (id != pelicula.PeliculaId)
-            {
-                return NotFound();
-            }*/
-
+          
             if (ModelState.IsValid)
             {
 
