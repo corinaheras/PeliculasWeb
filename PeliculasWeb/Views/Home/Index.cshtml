@@ -4,9 +4,20 @@
 
 <container class="h-100">
 <div class="text-center">
-    <div class="">
-        <h1 class="display-4 ">Películas Web</h1>
+<div class="jumbotron bg-light p-5 rounded" style="background-image: url('./imagenes/background.jpg'); background-size: cover; background-position: center;">
+        <h1 class="display-4">¡Bienvenido a Películas Web!</h1>
+        <p class="lead">Explora, crea y comparte tus películas favoritas. Descubre reseñas de otros usuarios y deja tu opinión sobre las películas que amas.</p>
+        <hr class="my-4">
+        <p>Comienza tu experiencia ahora:</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a class="btn btn-primary btn-lg" asp-controller="Peliculas" asp-action="Index">Explorar Películas</a>
+            <a class="btn btn-secondary btn-lg" asp-controller="Reseñas" asp-action="Index">Ver Reseñas</a>
+        </div>
     </div>
-    <p>Bienvenido a su gestor de películas</p>
 </div>
+
+<footer class="text-center mt-5">
+    <p>&copy; 2025 Películas Web. Todos los derechos reservados.</p>
+</footer>
+
 </container>
