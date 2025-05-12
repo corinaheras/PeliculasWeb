@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<PeliculasWeb.Models.Pelicula>
 
 @{
-	ViewData["Title"] = "Index";
+	ViewData["Title"] = "Películas"; 
 }
 
 <h1>Peliculas</h1>
 
-<div class="mb-4">
+<div class="container mb-4">
 	<a asp-action="Create" class="btn btn-success">Nueva Película</a>
-</div>
+
 
 <div class="card mb-4">
 	<div class="card-body">
@@ -82,16 +82,39 @@
 					{
 						<img src="@item.ImagenRuta" alt="Portada" style="width:100px;height:auto;" />
 					}
-				<td>
+					<td>
 
-				<td>
-					<div class="btn-group" role="group">
-						<a asp-action="Edit" asp-route-id="@item.PeliculaId" class="btn btn-sm btn-outline-warning">Editar</a>
-						<a asp-action="Details" asp-route-id="@item.PeliculaId" class="btn btn-sm btn-outline-info">Detalles</a>
-						<a asp-action="Delete" asp-route-id="@item.PeliculaId" class="btn btn-sm btn-outline-danger">Eliminar</a>
-					</div>
-				</td>
+						<td>
+							<div class="btn-group" role="group">
+								<a asp-action="Edit" asp-route-id="@item.PeliculaId" class="btn btn-sm btn-outline-warning">Editar</a>
+								<a asp-action="Details" asp-route-id="@item.PeliculaId" class="btn btn-sm btn-outline-info">Detalles</a>
+								<a asp-action="Delete" asp-route-id="@item.PeliculaId" class="btn btn-sm btn-outline-danger">Eliminar</a>
+							</div>
+						</td>
 			</tr>
 		}
 	</tbody>
 </table>
+
+<nav aria-label="Paginación Películas">
+	<ul class="pagination">
+		@{
+			int currentPage = (int)ViewData["CurrentPage"];
+			int totalPages = (int)ViewData["TotalPages"];
+			string currentFilter = ViewData["CurrentFilter"] as string ?? "";
+		}
+
+		@for (int i = 1; i <= totalPages; i++)
+		{
+			<li class="page-item @(i == currentPage ? "active" : "")">
+				<a class="page-link"
+				asp-action="Index"
+				asp-route-page="@i"
+				asp-route-searchString="@currentFilter">
+				@i
+				</a>
+			</li>
+		}
+	</ul>
+</nav>
+</div>

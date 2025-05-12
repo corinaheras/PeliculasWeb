@@ -20,10 +20,9 @@ namespace PeliculasWeb.Controllers
         }
 
         // GET: Peliculas
-        public async Task<IActionResult> Index(string searchString, string NombreGenero)
+        public async Task<IActionResult> Index(string searchString, string NombreGenero, int page = 1)
         {
-            ViewData["CurrentFilter"] = searchString;
-            ViewData["Genero"] = NombreGenero;
+            int pageSize = 4; 
 
             var peliculas = from p in _context.Peliculas
                 .Include(p => p.Actor)
@@ -41,7 +40,25 @@ namespace PeliculasWeb.Controllers
                 peliculas = peliculas.Where(p => p.Genero.NombreGenero.Contains(NombreGenero));
             }
 
-            return View(await peliculas.ToListAsync());
+
+            peliculas = peliculas.OrderBy(a => a.NombrePelicula);
+
+            int totalPeliculas = await peliculas.CountAsync();
+
+            var peliculas2 = await peliculas
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+
+            ViewData["CurrentPage"] = page;
+            ViewData["TotalPages"] = (int)Math.Ceiling(totalPeliculas / (double)pageSize);
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["Genero"] = NombreGenero;
+
+            return View(peliculas2); 
+
+           
         }
 
         // GET: Peliculas/Details/5
